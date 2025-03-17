@@ -176,8 +176,38 @@ class SuperComplexMazeEnv(gym.Env):
 
         self.current_position = new_pos
         done = (new_pos == self.goal)
-        reward = 1 if done else -0.1
-        return self._get_obs(), reward, done, {}
+        
+        # Tính khoảng cách tới đích
+        distance = np.linalg.norm(np.array(new_pos) - np.array(self.goal))
+        
+        # Tính khoảng cách mới và cũ
+        old_distance = np.linalg.norm(np.array(self.current_position) - np.array(self.goal))
+        new_distance = distance
+        
+        # Reward cơ bản
+        reward = -0.01  # Phạt nhẹ mỗi bước
+        
+        # Thưởng/phạt dựa trên hướng di chuyển
+        if new_distance < old_distance:
+            reward += 0.1  # Thưởng khi tiến gần đích
+        elif new_distance > old_distance:
+            reward -= 0.05  # Phạt nhẹ khi đi xa đích
+            
+        # Thêm reward dựa trên khoảng cách
+        reward += 0.3 / (new_distance + 1)  # +1 để tránh chia cho 0
+        
+        # Thêm bonus khi đạt mục tiêu
+        if done:
+            reward += 10.0  # Bonus lớn khi thành công
+            
+        # Thông tin bổ sung
+        info = {
+            'distance': distance,
+            'success': done,
+            'position': new_pos
+        }
+        
+        return self._get_obs(), reward, done, info
 
     def render(self, mode='human'):
         print(self._get_obs())
