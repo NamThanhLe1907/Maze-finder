@@ -245,7 +245,7 @@ def gui_loop(env, policy_net, delay=0.5, run_time=15):
     # Define button rectangles (display-only)
     btn_start_rect = pygame.Rect(10, window_height - 80, BTN_WIDTH, BTN_HEIGHT)
     btn_finish_rect = pygame.Rect(window_width - BTN_WIDTH - 10, window_height - 80, BTN_WIDTH, BTN_HEIGHT)
-    agent_name = "Wins"
+    agent_name = "Billy"
 
     running = True
     # Single main loop for GUI updates
